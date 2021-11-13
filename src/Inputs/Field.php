@@ -151,6 +151,32 @@ abstract class Field implements JsonSerializable
     }
 
     /**
+     * Set the name for the field.
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function name(string $name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Set the label value for the field.
+     *
+     * @param  string  $label
+     * @return $this
+     */
+    public function label(string $label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
      * Set the input value for the field.
      *
      * @param  string  $input
