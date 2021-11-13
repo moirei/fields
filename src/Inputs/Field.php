@@ -468,15 +468,12 @@ abstract class Field implements JsonSerializable
      */
     public function toArray(): array
     {
-        return array_merge([
-            'label' => $this->label,
-            'name' => $this->name,
-            'input' => $this->input,
-            'readonly' => $this->readonly,
-            'required' => $this->required,
-            'nullable' => $this->nullable,
-            'default' => $this->default,
-        ], $this->meta());
+        $array = [];
+        foreach ($this->getLocalFields() as $field) {
+            $array[$field] = $this->$field;
+        }
+
+        return array_merge($array, $this->meta());
     }
 
     /**
