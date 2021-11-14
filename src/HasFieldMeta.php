@@ -27,21 +27,21 @@ trait HasFieldMeta
      *
      * @return array
      */
-    public function getOptionsAttribute(): array
+    public function getItemsAttribute(): array
     {
-        return Arr::get($this->meta, 'options', []);
+        return Arr::get($this->meta, 'items', []);
     }
 
     /**
-     * Set options attribute
+     * Set items attribute
      *
-     * @param array $options
+     * @param array $items
      * @return array
      */
-    public function setOptionsAttribute(array $options): array
+    public function setItemsAttribute(array $items): array
     {
-        $this->withMeta(['options' => $options]);
-        return $options;
+        $this->withMeta(['items' => $items]);
+        return $items;
     }
 
     /**
@@ -189,9 +189,9 @@ trait HasFieldMeta
      *
      * @return array
      */
-    public function getConditionOptionsAttribute(): array
+    public function getConditionalItemsAttribute(): array
     {
-        return Arr::get($this->meta, 'conditionOptions', []);
+        return Arr::get($this->meta, 'conditionalItems', []);
     }
 
     /**
@@ -200,10 +200,10 @@ trait HasFieldMeta
      * @param array $conditions
      * @return array
      */
-    public function setConditionOptionsAttribute(array $conditionOptions): array
+    public function setConditionalItemsAttribute(array $conditionalItems): array
     {
-        $this->withMeta(['conditionOptions' => $conditionOptions]);
-        return $conditionOptions;
+        $this->withMeta(['conditionalItems' => $conditionalItems]);
+        return $conditionalItems;
     }
 
     /**

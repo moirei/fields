@@ -28,19 +28,19 @@ class Select extends Field
      * Set the options for the select menu.
      *
      * @param  array|\Closure|\Illuminate\Support\Collection
-     * @param mixed $attribute
+     * @param mixed $property
      * @param mixed $nameOperation
      * @param mixed $nameValue
      * @param bool $setRules
      * @return $this
      */
-    public function options($options, string $attribute = null, $nameOperation = null, $nameValue = null, bool $setRules = false)
+    public function items($items, string $property = null, $nameOperation = null, $nameValue = null, bool $setRules = false)
     {
-        if (is_callable($options)) {
-            $options = $options();
+        if (is_callable($items)) {
+            $items = $items();
         }
 
-        $options = collect($options ?? [])->map(function ($option) {
+        $items = collect($items ?? [])->map(function ($option) {
             return is_array($option) ?
                 $option :
                 ['text' => Str::ucfirst($option), 'value' => $option];
@@ -48,40 +48,76 @@ class Select extends Field
 
         $meta = [];
 
-        if ($attribute) {
-            if (!isset($meta['conditionalOptions'])) $meta['conditionalOptions'] = [];
-            $meta['conditionalOptions'][] = [
-                'options' => $options,
-                'attribute' => $attribute,
+        if ($property) {
+            $conditionalItems = $this->meta('conditionalItems', []);
+            $conditionalItems[] = [
+                'items' => $items,
+                'property' => $property,
                 'operation' => is_null($nameValue) ? '=' : (string)$nameOperation,
                 'value' => is_null($nameValue) ? $nameOperation : $nameValue,
             ];
+            $meta['conditionalItems'] = $conditionalItems;
         } else {
-            $meta['options'] = $options;
+            $meta['items'] = $items;
         }
 
         if ($setRules) {
-            $this->rulesFromOptions();
+            $this->rulesFromItems();
         }
 
         return $this->withMeta($meta);
     }
 
     /**
+     * Set the options for the select menu.
+     *
+     * @param  array|\Closure|\Illuminate\Support\Collection
+     * @param mixed $property
+     * @param mixed $nameOperation
+     * @param mixed $nameValue
+     * @param bool $setRules
+     * @return $this
+     */
+    public function options($items, string $property = null, $nameOperation = null, $nameValue = null, bool $setRules = false)
+    {
+        return $this->items($items, $property, $nameOperation, $nameValue, $setRules);
+    }
+
+    /**
+     * Get the select options.
+     *
+     * @return array
+     */
+    public function getItems(): array
+    {
+        return $this->meta('items', []);
+    }
+
+    /**
+     * Get the select options.
+     *
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->getItems();
+    }
+
+    /**
      * Set rules from options.
-     * Not implemented for conditionalOptions
+     * Not implemented for conditionalItems
      *
      * @return $this
      */
-    public function rulesFromOptions()
+    public function rulesFromItems()
     {
-        if ($options = Arr::get($this->meta, 'options')) {
-            $this->rules(Rule::in(array_map(fn ($option) => $option['value'], $options)));
-        } else if ($conditionalOptions = Arr::get($this->meta, 'conditionalOptions')) {
-            // foreach ($conditionalOptions as $option) {
-            //     $attribute = $option['attribute'];
+        if ($items = Arr::get($this->meta, 'items')) {
+            $this->rules(Rule::in(array_map(fn ($option) => $option['value'], $items)));
+        } else if ($conditionalItems = Arr::get($this->meta, 'conditionalItems')) {
+            // foreach ($conditionalItems as $option) {
+            //     $property = $option['property'];
             //     $operation = $option['operation'];
-            //     $this->rules(Rule::in(array_map(fn ($option) => $option['value'], $this->options)));
+            //     $this->rules(Rule::in(array_map(fn ($option) => $option['value'], $this->items)));
             // }
         }
 
