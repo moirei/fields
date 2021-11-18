@@ -79,7 +79,7 @@ abstract class Field implements JsonSerializable
      *
      * @var string[]
      */
-    protected array $localFields = ['label', 'name', 'placeholder', 'rules', 'readonly', 'required', 'nullable', 'default'];
+    protected array $localFields = ['label', 'name', 'input', 'placeholder', 'rules', 'readonly', 'required', 'nullable', 'default'];
 
     /**
      * Define extra local fields without modifying localFields
