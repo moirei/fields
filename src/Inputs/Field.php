@@ -505,9 +505,9 @@ abstract class Field implements JsonSerializable
     /**
      * Prepare the field for JSON serialization.
      *
-     * @return array
+     * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->toArray();
     }
